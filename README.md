@@ -75,3 +75,28 @@ Use the Custom button to enter a specific date in either:
 
 The script appends a history entry to `ClonezillaBackupHistory.log` each time Run now is pressed, including the new next reminder date.
 
+## Implementation
+
+The reminder is created in Windows Task Scheduler and starts at user logon with a 1-minute delay. It launches:
+
+`wscript.exe "C:\Scripts\run_hidden.vbs"`
+
+This runs the reminder script in the background without opening a console window.
+
+Use the following Task Scheduler settings:
+
+- General
+  - `Run only when user is logged on`
+  - `Run with highest privileges`
+- Trigger
+  - `At user logon`
+- Action
+  - `Start a program: wscript.exe "C:\Scripts\run_hidden.vbs"`
+- Conditions
+  - `Start the task only if the computer is on AC power`
+  - `Stop if the computer switches to battery power`
+- Settings
+  - `Run task as soon as possible after a scheduled start is missed`
+  - `If the task fails, restart every 1 minute`
+
+This setup starts the reminder automatically after login and helps avoid duplicate runs.
